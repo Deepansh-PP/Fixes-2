@@ -1,0 +1,160 @@
+{%- comment -%}
+  AONA - Category Stories
+  Instagram-style horizontal scroll of circular categories
+{%- endcomment -%}
+
+<style>
+  .category-stories {
+    padding: 20px 0;
+    overflow: hidden;
+    background: white;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .stories-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 0 16px;
+    gap: 16px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .stories-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .story-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-width: 72px;
+    text-decoration: none;
+    scroll-snap-align: start;
+    cursor: pointer;
+  }
+
+  .story-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(45deg, #D4AF37, #880015);
+    position: relative;
+    transition: transform 0.2s ease;
+  }
+
+  .story-ring.unseen {
+    background: #e0e0e0; /* Grey ring for visited/no-highlight */
+  }
+
+  .story-item:hover .story-ring {
+    transform: scale(1.05);
+  }
+
+  .story-image-wrap {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid white;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .story-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .story-title {
+    font-size: 11px;
+    color: var(--color-text-primary, #333);
+    text-align: center;
+    max-width: 80px;
+    line-height: 1.2;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+
+<div class="category-stories">
+  <div class="stories-container">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link | default: '#' }}" class="story-item" {{ block.shopify_attributes }}>
+        <div class="story-ring {% if block.settings.highlight %}highlighted{% else %}unseen{% endif %}">
+          <div class="story-image-wrap">
+            {%- if block.settings.image != blank -%}
+              <img 
+                src="{{ block.settings.image | image_url: width: 100, height: 100, crop: 'center' }}" 
+                alt="{{ block.settings.title | escape }}"
+                class="story-image"
+                width="100"
+                height="100"
+                loading="lazy"
+              >
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag: 'story-image' }}
+            {%- endif -%}
+          </div>
+        </div>
+        <span class="story-title">{{ block.settings.title }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Category Stories",
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Label",
+          "default": "Category"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Show Gold/Red Ring",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Stories",
+      "blocks": [
+        { "type": "story", "settings": { "title": "New" } },
+        { "type": "story", "settings": { "title": "Sale" } },
+        { "type": "story", "settings": { "title": "Best" } },
+        { "type": "story", "settings": { "title": "Decor" } },
+        { "type": "story", "settings": { "title": "Statues" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,67 @@
+{%- comment -%}
+  AONA - Category Tabs
+  Horizontal scrollable tabs (ALL, BRASS, RESIN, NEW ARRIVALS)
+{%- endcomment -%}
+
+<div class="category-tabs-wrapper">
+  <nav class="category-tabs">
+    <a href="/collections/all" class="tab-item {% if collection.handle == 'all' or request.page_type == 'index' %}active{% endif %}">ALL</a>
+    <a href="/collections/brass" class="tab-item {% if collection.handle == 'brass' %}active{% endif %}">BRASS</a>
+    <a href="/collections/resin" class="tab-item {% if collection.handle == 'resin' %}active{% endif %}">RESIN</a>
+    <a href="/collections/new-arrivals" class="tab-item {% if collection.handle == 'new-arrivals' %}active{% endif %}">NEW ARRIVALS</a>
+  </nav>
+</div>
+
+<style>
+.category-tabs-wrapper {
+  background: white;
+  border-bottom: 1px solid #EEEEEE;
+  position: sticky;
+  top: 56px; /* Matches header height */
+  z-index: 98; /* Below header (9999) but above content */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 4px 6px -4px rgba(0,0,0,0.1);
+}
+
+.category-tabs {
+  display: flex;
+  padding: 0 16px;
+  gap: 15px;
+  min-width: min-content;
+}
+
+.tab-item {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  text-decoration: none;
+  padding: 12px 0;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  text-transform: uppercase;
+}
+
+.tab-item.active {
+  color: #880015;
+  border-bottom-color: #880015;
+}
+
+/* HIDE ON PC (Nykaa doesn't use these tabs on desktop) */
+@media (min-width: 992px) {
+  .category-tabs-wrapper {
+    display: none; 
+  }
+}
+</style>
+{% schema %}
+{
+  "name": "Category Tabs",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Category Tabs"
+    }
+  ]
+}
+{% endschema %}
